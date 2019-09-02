@@ -1,7 +1,8 @@
-package com.zombie.controller;
+package com.zombie;
 
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 
 public class OrthoCamController extends InputAdapter {
@@ -29,6 +30,23 @@ public class OrthoCamController extends InputAdapter {
     @Override
     public boolean touchUp (int x, int y, int pointer, int button) {
         last.set(-1, -1, -1);
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(int amount) {
+        if (amount < 0) {
+            camera.zoom -= 0.25f;
+            if (camera.zoom < 0.25) {
+                camera.zoom = 0.25f;
+            }
+        } else {
+            camera.zoom += 0.25;
+            if (camera.zoom > 2) {
+                camera.zoom = 2;
+            }
+        }
+
         return false;
     }
 }

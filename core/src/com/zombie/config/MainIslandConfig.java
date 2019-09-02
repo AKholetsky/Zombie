@@ -33,11 +33,11 @@ public class MainIslandConfig implements MapConfig {
         return Gdx.files.internal(mainIslandPath + imagePath);
     }
 
-    private int tileMapHeight() {
+    public int tileMapHeight() {
         return parse().getInt("tileMapHeight");
     }
 
-    private int tileMapWidth() {
+    public int tileMapWidth() {
         return parse().getInt("tileMapWidth");
     }
 

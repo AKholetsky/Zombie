@@ -2,6 +2,7 @@ package com.zombie;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -10,7 +11,6 @@ import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.badlogic.gdx.utils.Array;
 import com.zombie.config.MainIslandConfig;
 import com.zombie.config.TileConfig;
-import com.zombie.controller.OrthoCamController;
 import com.zombie.tile.Tiles;
 
 public class LandMap {
@@ -19,13 +19,10 @@ public class LandMap {
     private OrthographicCamera camera;
     private TiledMap map;
     private TiledMapRenderer renderer;
-    private OrthoCamController controller;
 
     public LandMap(String config, OrthographicCamera camera) {
         this.config = new MainIslandConfig(config);
         this.camera = camera;
-        this.controller = new OrthoCamController(this.camera);
-        Gdx.input.setInputProcessor(this.controller);
     }
 
     public void create() {
@@ -55,5 +52,13 @@ public class LandMap {
             tileConfig.setLayerY(((tileConfig.y()) / this.config.tileHeight()));
         }
         return configs;
+    }
+
+    public int worldWidth() {
+        return config.tileMapWidth();
+    }
+
+    public int worldHeight() {
+        return config.tileMapHeight();
     }
 }

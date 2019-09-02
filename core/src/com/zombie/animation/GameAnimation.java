@@ -2,7 +2,6 @@ package com.zombie.animation;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.zombie.config.animation.AnimationConfig;
 
@@ -24,6 +23,9 @@ public class GameAnimation {
 
     public TextureRegion currentFrame(float stateTime) {
         TextureRegion keyFrame = animation.getKeyFrame(stateTime, true);
+        if (!keyFrame.isFlipY()) {
+            keyFrame.flip(false, true);
+        }
         return keyFrame;
     }
 }
