@@ -146,3 +146,5 @@ data/core/src/com/zombie/config/animation/AnimationConfig.java.i
 data/README.md.i
 data/core/src/com/zombie/config/animation/GameAnimationConfig.java.i
 data/core/src/com/zombie/animation/GameAnimation.java.i
+data/core/src/com/zombie/actors/WhiteWave.java.i
+data/core/src/com/zombie/controller/ZombieController.java.i
