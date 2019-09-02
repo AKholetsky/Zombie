@@ -1,1 +1,1 @@
-Mouse controll upgraded
+Mouse position fit sprite position rendered on click

@@ -38,7 +38,7 @@ public class Zombie extends ApplicationAdapter {
 		whiteWave = new WhiteWave(
 				new GameAnimation(new GameAnimationConfig("animations/white_wave/","white_wave.xml")),
 				batch,
-				camera);
+				viewport);
 		whiteWave.create();
 		InputMultiplexer processor = new InputMultiplexer(whiteWave);
 		processor.addProcessor(camController);
@@ -50,10 +50,10 @@ public class Zombie extends ApplicationAdapter {
 		Gdx.gl.glClearColor(0, 0.2f, 0.5f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		camera.update();
+		map.render();
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		whiteWave.draw(Gdx.graphics.getDeltaTime());
-		map.render();
 		batch.end();
 	}
 	
