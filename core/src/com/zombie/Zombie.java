@@ -6,16 +6,12 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FillViewport;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.zombie.actors.WalkingZombie;
 import com.zombie.actors.WhiteWave;
 import com.zombie.animation.GameAnimation;
 import com.zombie.config.animation.GameAnimationConfig;
-import com.zombie.controller.GlobalInputProcessor;
 
 public class Zombie extends ApplicationAdapter {
     private SpriteBatch batch;
@@ -25,15 +21,16 @@ public class Zombie extends ApplicationAdapter {
     private LandMap map;
     private WhiteWave whiteWave;
     private OrthoCamController camController;
+    private WalkingZombie walkingZombie;
 
 	@Override
 	public void create () {
 		camera = new OrthographicCamera();
+		camController = new OrthoCamController(camera);
 		batch = new SpriteBatch();
 		map = new LandMap("maps/main_island/main_island_map_config.xml", camera);
 		map.create();
 		viewport = new FillViewport(map.worldWidth(), map.worldHeight(), camera);
-		camController = new OrthoCamController(camera, viewport);
 		viewport.apply();
 		camera.setToOrtho(true);
 		whiteWave = new WhiteWave(
@@ -41,12 +38,16 @@ public class Zombie extends ApplicationAdapter {
 				batch,
 				viewport);
 		whiteWave.create();
-		GlobalInputProcessor globalInputProcessor = new GlobalInputProcessor();
-		globalInputProcessor.registerTouchUp(whiteWave);
-		globalInputProcessor.registerTouchUp(camController);
-		globalInputProcessor.registerDragged(camController);
-		globalInputProcessor.registerScrolled(camController);
-		Gdx.input.setInputProcessor(globalInputProcessor);
+
+		walkingZombie = new WalkingZombie(
+				new GameAnimation(new GameAnimationConfig("animations/anim_woodcutter_walk_up/", "anim_woodcutter_walk_up.xml")),
+				batch,
+				viewport);
+		walkingZombie.create();
+		InputMultiplexer processor = new InputMultiplexer(whiteWave);
+		processor.addProcessor(camController);
+		processor.addProcessor(walkingZombie);
+		Gdx.input.setInputProcessor(processor);
 	}
 
 	@Override
@@ -57,7 +58,9 @@ public class Zombie extends ApplicationAdapter {
 		map.render();
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
-		whiteWave.draw(Gdx.graphics.getDeltaTime());
+		float deltaTime = Gdx.graphics.getDeltaTime();
+		whiteWave.draw(deltaTime);
+		walkingZombie.draw(deltaTime);
 		batch.end();
 	}
 	

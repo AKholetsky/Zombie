@@ -7,9 +7,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.zombie.animation.GameAnimation;
-import com.zombie.controller.TouchUp;
 
-public class WhiteWave implements TouchUp {
+public class WhiteWave extends InputAdapter {
 
     private final SpriteBatch sprite;
     public GameAnimation whiteWave;
@@ -25,12 +24,11 @@ public class WhiteWave implements TouchUp {
     }
 
     @Override
-    public void touchUp(int screenX, int screenY) {
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         Vector3 unproject = viewport.unproject(new Vector3(screenX, screenY, 0));
-        System.out.println(unproject.x + " : " + unproject.y);
-        System.out.println(screenX + " : " + screenY);
         this.x = unproject.x;
         this.y = unproject.y;
+        return false;
     }
 
     public void draw(float timeStamp) {
