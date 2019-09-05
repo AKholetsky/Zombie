@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.zombie.actors.WhiteWave;
 import com.zombie.animation.GameAnimation;
 import com.zombie.config.animation.GameAnimationConfig;
+import com.zombie.controller.GlobalInputProcessor;
 
 public class Zombie extends ApplicationAdapter {
     private SpriteBatch batch;
@@ -28,11 +29,11 @@ public class Zombie extends ApplicationAdapter {
 	@Override
 	public void create () {
 		camera = new OrthographicCamera();
-		camController = new OrthoCamController(camera);
 		batch = new SpriteBatch();
 		map = new LandMap("maps/main_island/main_island_map_config.xml", camera);
 		map.create();
 		viewport = new FillViewport(map.worldWidth(), map.worldHeight(), camera);
+		camController = new OrthoCamController(camera, viewport);
 		viewport.apply();
 		camera.setToOrtho(true);
 		whiteWave = new WhiteWave(
@@ -40,9 +41,12 @@ public class Zombie extends ApplicationAdapter {
 				batch,
 				viewport);
 		whiteWave.create();
-		InputMultiplexer processor = new InputMultiplexer(whiteWave);
-		processor.addProcessor(camController);
-		Gdx.input.setInputProcessor(processor);
+		GlobalInputProcessor globalInputProcessor = new GlobalInputProcessor();
+		globalInputProcessor.registerTouchUp(whiteWave);
+		globalInputProcessor.registerTouchUp(camController);
+		globalInputProcessor.registerDragged(camController);
+		globalInputProcessor.registerScrolled(camController);
+		Gdx.input.setInputProcessor(globalInputProcessor);
 	}
 
 	@Override

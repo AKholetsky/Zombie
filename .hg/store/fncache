@@ -149,3 +149,7 @@ data/core/src/com/zombie/animation/GameAnimation.java.i
 data/core/src/com/zombie/actors/WhiteWave.java.i
 data/core/src/com/zombie/controller/ZombieController.java.i
 data/core/src/com/zombie/actors/WalkingZombie.java.i
+data/core/src/com/zombie/controller/Scrolled.java.i
+data/core/src/com/zombie/controller/Dragged.java.i
+data/core/src/com/zombie/controller/TouchUp.java.i
+data/core/src/com/zombie/controller/GlobalInputProcessor.java.i
