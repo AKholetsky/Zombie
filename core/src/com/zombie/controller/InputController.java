@@ -28,7 +28,7 @@ public class InputController extends InputAdapter {
         Tree tree = biomController.checkTree(unproject);
         if (tree != null) {
             for (MoveAndCut moveAndCut : moveAndCuts) {
-                moveAndCut.moveAndCut(unproject);
+                moveAndCut.moveAndCut(tree);
             }
         } else {
             for (MoveTo moveTo : simpleMove) {

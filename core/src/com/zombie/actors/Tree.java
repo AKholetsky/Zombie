@@ -39,7 +39,7 @@ public class Tree {
             this.batch.draw(this.shadow.currentFrame(deltaTime), shadowPosition.x, shadowPosition.y);
             this.batch.draw(this.treeAnimation.currentFrame(deltaTime), treePosition.x, treePosition.y);
         } else {
-            this.batch.draw(this.stump.currentFrame(deltaTime), treePosition.x, treePosition.y);
+            this.batch.draw(this.stump.currentFrame(deltaTime), treePosition.x + treeWidth() / 2f, treePosition.y + treeHeight());
         }
     }
 
@@ -66,17 +66,9 @@ public class Tree {
         }
     }
 
-    public Vector3 leftCOllision() {
+    public Vector3 centerCollision() {
         return new Vector3(
-                this.treePosition.x,
-                this.treePosition.y + this.treeHeight(),
-                0
-        );
-    }
-
-    public Vector3 rightCollision() {
-        return new Vector3(
-                this.treePosition.x + this.treeWidth(),
+                this.treePosition.x + this.treeWidth() / 2f,
                 this.treePosition.y + this.treeHeight(),
                 0
         );

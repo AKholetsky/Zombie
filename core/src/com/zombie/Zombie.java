@@ -58,6 +58,8 @@ public class Zombie extends ApplicationAdapter {
 				new GameAnimation(new GameAnimationConfig("animations/anim_woodcutter_walk_down/", "anim_woodcutter_walk_down.xml")),
 				new GameAnimation(new GameAnimationConfig("animations/anim_woodcutter_stand/", "anim_woodcutter_stand.xml")),
 				new GameAnimation(new GameAnimationConfig("animations/anim_woodcutter_woodcut/", "anim_woodcutter_woodcut.xml")),
+				new GameAnimation(new GameAnimationConfig("animations/anim_woodcutter_walkwood_up/", "anim_woodcutter_walkwood_up.xml")),
+				new GameAnimation(new GameAnimationConfig("animations/anim_woodcutter_walkwood_down/", "anim_woodcutter_walkwood_down.xml")),
 				batch,
 				viewport,
 				biomController);
