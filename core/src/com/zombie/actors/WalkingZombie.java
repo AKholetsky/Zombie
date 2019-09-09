@@ -8,8 +8,10 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.zombie.animation.GameAnimation;
 import com.zombie.controller.BiomController;
+import com.zombie.controller.MoveAndCut;
+import com.zombie.controller.MoveTo;
 
-public class WalkingZombie extends InputAdapter {
+public class WalkingZombie implements MoveAndCut {
 
     private final Viewport viewport;
     private final SpriteBatch spriteBatch;
@@ -19,12 +21,13 @@ public class WalkingZombie extends InputAdapter {
     private GameAnimation stand;
     private GameAnimation cut;
     private Vector3 currPosition;
-    private Vector3 moveTo;
+    private Vector3 moveToPoint;
     private float deltaTime;
     private Orientation orientation = Orientation.UP_LEFT;
     private boolean cutTheTree = false;
     private boolean walking = false;
     private Tree treeToBeCutted;
+
 
     enum Orientation {
         UP_LEFT,
@@ -47,7 +50,7 @@ public class WalkingZombie extends InputAdapter {
         this.spriteBatch = batch;
         this.viewport = viewport;
         this.currPosition = new Vector3(1490, 1570, 0);
-        this.moveTo = new Vector3();
+        this.moveToPoint = new Vector3();
         this.biomController = biomController;
     }
 
@@ -58,73 +61,88 @@ public class WalkingZombie extends InputAdapter {
         this.cut.create();
     }
 
+    //Point at left down corner of sprite
+    private Vector3 leftCollision() {
+        return new Vector3(
+                this.currPosition.x,
+                this.currPosition.y + this.walkingUpAnimation.config.frameHeight(),
+                0
+        );
+    }
+
+    //Point at right down corner of sprite
+    private Vector3 rightCollision() {
+        return new Vector3(
+                this.currPosition.x + this.walkingUpAnimation.config.frameWidth(),
+                this.currPosition.y + this.walkingUpAnimation.config.frameHeight(),
+                0
+        );
+    }
+
     @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        moveTo = viewport.unproject(new Vector3(screenX, screenY, 0));
-        this.orientation = guessOrientation();
-        Tree tree = biomController.checkTree(moveTo);
-        if (tree != null) {
-            cutTheTree = true;
-            this.treeToBeCutted = tree;
-            moveTo = new Vector3(tree.getTreePosition().x, tree.getTreePosition().y + tree.treeHeight(), 0 );
+    public void moveTo(Vector3 moveToPos) {
+        moveToPoint = moveToPos;
+    }
+
+    @Override
+    public void moveAndCut(Tree tree) {
+        if (leftCollision().x < tree.leftCOllision().x) {
+            moveToPoint = tree.leftCOllision();
+        } else {
+            moveToPoint = tree.rightCollision();
         }
-        return false;
+
     }
 
     private Orientation guessOrientation() {
-        if (currPosition.x < moveTo.x && currPosition.y < moveTo.y) {
-            return Orientation.DOWN_RIGHT;
-        } else if (currPosition.x >= moveTo.x && currPosition.y >= moveTo.y) {
+        if (moveToPoint.x <= leftCollision().x && moveToPoint.y <= leftCollision().y) {
             return Orientation.UP_LEFT;
-        } else if (currPosition.x >= moveTo.x && currPosition.y < moveTo.y ) {
+        } else if (moveToPoint.x > leftCollision().x && moveToPoint.y <= leftCollision().y) {
+            return Orientation.UP_RIGHT;
+        } else if (moveToPoint.x <= leftCollision().x && moveToPoint.y > leftCollision().y) {
             return Orientation.DOWN_LEFT;
         } else {
-            return Orientation.UP_RIGHT;
+            return Orientation.DOWN_RIGHT;
         }
     }
 
     public void draw(float timeStamp) {
         this.deltaTime += timeStamp;
+        this.orientation = guessOrientation();
         updatePosition();
-        if (walking) {
+//        if (walking) {
             TextureRegion walking = guessTexture();
             this.spriteBatch.draw(
                     walking,
                     this.currPosition.x,
                     this.currPosition.y);
-        } else {
-            if (cutTheTree) {
-                this.spriteBatch.draw(cut.currentFrame(deltaTime), this.currPosition.x, this.currPosition.y);
-                treeToBeCutted.cut();
-            } else {
-                this.spriteBatch.draw(this.stand.currentFrame(deltaTime), this.currPosition.x, this.currPosition.y);
-            }
-        }
+//        } else {
+//            if (cutTheTree) {
+//                this.spriteBatch.draw(cut.currentFrame(deltaTime), this.currPosition.x, this.currPosition.y);
+//                treeToBeCutted.cut();
+//            } else {
+//                this.spriteBatch.draw(this.stand.currentFrame(deltaTime), this.currPosition.x, this.currPosition.y);
+//            }
+//        }
     }
 
     private void updatePosition() {
-        if (Math.abs(currPosition.x - moveTo.x) > 1 || Math.abs(currPosition.y - moveTo.y) > 1) {
-            walking = true;
-            if (this.orientation == Orientation.UP_LEFT || this.orientation == Orientation.DOWN_LEFT) {
-                if (currPosition.x > moveTo.x) {
-                    currPosition.x -= 1;
-                }
-            } else {
-                if (currPosition.x < moveTo.x) {
-                    currPosition.x += 1;
-                }
+        if (this.orientation == Orientation.UP_LEFT) {
+            if (Math.abs(leftCollision().x - moveToPoint.x) > 1) {
+                this.currPosition.x -= 1;
             }
-            if (this.orientation == Orientation.UP_LEFT || this.orientation == Orientation.UP_RIGHT) {
-                if (currPosition.y > moveTo.y) {
-                    currPosition.y -= 1;
-                }
-            } else {
-                if (currPosition.y < moveTo.y) {
-                    currPosition.y += 1;
-                }
+            if (Math.abs(leftCollision().y - moveToPoint.y) > 1) {
+                this.currPosition.y -= 1;
             }
-        } else {
-            walking = false;
+        } else if (this.orientation == Orientation.DOWN_LEFT) {
+            if (Math.abs(leftCollision().x - moveToPoint.x) > 1) {
+                this.currPosition.x -= 1;
+            }
+            if (Math.abs(leftCollision().y - moveToPoint.y) > 1) {
+                this.currPosition.y += 1;
+            }
+        } else if (this.orientation == Orientation.UP_RIGHT) {
+            if (Math.abs(rightCollision().x - ))
         }
     }
 

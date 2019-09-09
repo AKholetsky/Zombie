@@ -155,3 +155,6 @@ data/core/src/com/zombie/controller/TouchUp.java.i
 data/core/src/com/zombie/controller/GlobalInputProcessor.java.i
 data/core/src/com/zombie/actors/Tree.java.i
 data/core/src/com/zombie/controller/BiomController.java.i
+data/core/src/com/zombie/controller/MoveTo.java.i
+data/core/src/com/zombie/controller/MoveAndCut.java.i
+data/core/src/com/zombie/controller/InputController.java.i

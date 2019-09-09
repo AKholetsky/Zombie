@@ -65,4 +65,20 @@ public class Tree {
             return false;
         }
     }
+
+    public Vector3 leftCOllision() {
+        return new Vector3(
+                this.treePosition.x,
+                this.treePosition.y + this.treeHeight(),
+                0
+        );
+    }
+
+    public Vector3 rightCollision() {
+        return new Vector3(
+                this.treePosition.x + this.treeWidth(),
+                this.treePosition.y + this.treeHeight(),
+                0
+        );
+    }
 }

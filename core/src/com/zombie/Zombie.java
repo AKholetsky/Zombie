@@ -14,6 +14,7 @@ import com.zombie.actors.WhiteWave;
 import com.zombie.animation.GameAnimation;
 import com.zombie.config.animation.GameAnimationConfig;
 import com.zombie.controller.BiomController;
+import com.zombie.controller.InputController;
 
 public class Zombie extends ApplicationAdapter {
     private SpriteBatch batch;
@@ -38,8 +39,7 @@ public class Zombie extends ApplicationAdapter {
 		camera.setToOrtho(true);
 		whiteWave = new WhiteWave(
 				new GameAnimation(new GameAnimationConfig("animations/white_wave/","white_wave.xml")),
-				batch,
-				viewport);
+				batch);
 		whiteWave.create();
 
 		tree = new Tree(
@@ -63,9 +63,13 @@ public class Zombie extends ApplicationAdapter {
 				biomController);
 		walkingZombie.create();
 
-		InputMultiplexer processor = new InputMultiplexer(whiteWave);
+		InputController inputController = new InputController(viewport, biomController);
+		inputController.regMoveTo(whiteWave);
+		inputController.regMoveTo(walkingZombie);
+		inputController.regMoveAndCut(walkingZombie);
+
+		InputMultiplexer processor = new InputMultiplexer(inputController);
 		processor.addProcessor(camController);
-		processor.addProcessor(walkingZombie);
 		Gdx.input.setInputProcessor(processor);
 	}
 
