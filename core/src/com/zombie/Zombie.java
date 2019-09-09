@@ -8,10 +8,12 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.zombie.actors.Tree;
 import com.zombie.actors.WalkingZombie;
 import com.zombie.actors.WhiteWave;
 import com.zombie.animation.GameAnimation;
 import com.zombie.config.animation.GameAnimationConfig;
+import com.zombie.controller.BiomController;
 
 public class Zombie extends ApplicationAdapter {
     private SpriteBatch batch;
@@ -22,6 +24,7 @@ public class Zombie extends ApplicationAdapter {
     private WhiteWave whiteWave;
     private OrthoCamController camController;
     private WalkingZombie walkingZombie;
+    private Tree tree;
 
 	@Override
 	public void create () {
@@ -39,11 +42,27 @@ public class Zombie extends ApplicationAdapter {
 				viewport);
 		whiteWave.create();
 
+		tree = new Tree(
+				new GameAnimation(new GameAnimationConfig("animations/d_tropic_palm_01_0/", "d_tropic_palm_01_0.xml")),
+				new GameAnimation(new GameAnimationConfig("animations/d_tropic_palm_01_s/", "d_tropic_palm_01_s.xml")),
+				new GameAnimation(new GameAnimationConfig("animations/d_tropic_palm_01_stump/", "d_tropic_palm_01_stump.xml")),
+				batch
+		);
+		tree.create();
+
+		BiomController biomController = new BiomController();
+		biomController.add(tree);
+
 		walkingZombie = new WalkingZombie(
 				new GameAnimation(new GameAnimationConfig("animations/anim_woodcutter_walk_up/", "anim_woodcutter_walk_up.xml")),
+				new GameAnimation(new GameAnimationConfig("animations/anim_woodcutter_walk_down/", "anim_woodcutter_walk_down.xml")),
+				new GameAnimation(new GameAnimationConfig("animations/anim_woodcutter_stand/", "anim_woodcutter_stand.xml")),
+				new GameAnimation(new GameAnimationConfig("animations/anim_woodcutter_woodcut/", "anim_woodcutter_woodcut.xml")),
 				batch,
-				viewport);
+				viewport,
+				biomController);
 		walkingZombie.create();
+
 		InputMultiplexer processor = new InputMultiplexer(whiteWave);
 		processor.addProcessor(camController);
 		processor.addProcessor(walkingZombie);
@@ -61,6 +80,7 @@ public class Zombie extends ApplicationAdapter {
 		float deltaTime = Gdx.graphics.getDeltaTime();
 		whiteWave.draw(deltaTime);
 		walkingZombie.draw(deltaTime);
+		tree.draw(deltaTime);
 		batch.end();
 	}
 	

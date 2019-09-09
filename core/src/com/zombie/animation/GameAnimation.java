@@ -3,11 +3,12 @@ package com.zombie.animation;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector3;
 import com.zombie.config.animation.AnimationConfig;
 
 public class GameAnimation {
 
-    private final AnimationConfig config;
+    public final AnimationConfig config;
     private Animation<TextureRegion> animation;
 
     public GameAnimation(AnimationConfig configFile) {
@@ -27,5 +28,11 @@ public class GameAnimation {
             keyFrame.flip(false, true);
         }
         return keyFrame;
+    }
+
+    public Vector3 centerPosition(Vector3 currPosition) {
+        return new Vector3(currPosition.x - config.frameWidth() / 2f,
+                currPosition.y - config.frameHeight() /2f,
+                0);
     }
 }

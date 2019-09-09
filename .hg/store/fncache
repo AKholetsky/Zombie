@@ -153,3 +153,5 @@ data/core/src/com/zombie/controller/Scrolled.java.i
 data/core/src/com/zombie/controller/Dragged.java.i
 data/core/src/com/zombie/controller/TouchUp.java.i
 data/core/src/com/zombie/controller/GlobalInputProcessor.java.i
+data/core/src/com/zombie/actors/Tree.java.i
+data/core/src/com/zombie/controller/BiomController.java.i
